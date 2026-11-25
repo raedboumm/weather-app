@@ -1,0 +1,368 @@
+/* =========================================================
+   Weather App styles
+   - CSS variables for colours, so the theme can change with the weather
+   - Mobile first, media queries for tablets and desktops
+   ========================================================= */
+
+:root {
+  --bg-from: #1e3a8a;
+  --bg-to: #3b82f6;
+  --card: rgba(255, 255, 255, 0.16);
+  --card-border: rgba(255, 255, 255, 0.28);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.78);
+  --accent: #fbbf24;
+  --error-bg: rgba(220, 38, 38, 0.85);
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+/* Weather themes: script.js sets one of these classes on <body> */
+.theme-clear-day   { --bg-from: #0ea5e9; --bg-to: #fbbf24; }
+.theme-clear-night { --bg-from: #0f172a; --bg-to: #312e81; }
+.theme-cloudy      { --bg-from: #475569; --bg-to: #94a3b8; }
+.theme-rain        { --bg-from: #1e293b; --bg-to: #3b82f6; }
+.theme-snow        { --bg-from: #64748b; --bg-to: #cbd5e1; }
+.theme-storm       { --bg-from: #111827; --bg-to: #4c1d95; }
+.theme-fog         { --bg-from: #6b7280; --bg-to: #d1d5db; }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: linear-gradient(160deg, var(--bg-from), var(--bg-to));
+  background-attachment: fixed;
+  transition: background 0.6s ease;
+}
+
+/* ---------- layout ---------- */
+.app {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 16px 32px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: 0.5px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 20px;
+  margin-top: 16px;
+  animation: fade-in 0.4s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.muted {
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- unit toggle ---------- */
+.unit-toggle {
+  display: flex;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+.unit-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.unit-btn.is-active {
+  background: var(--text);
+  color: #1e293b;
+}
+
+/* ---------- search ---------- */
+.search {
+  display: flex;
+  gap: 8px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 16px;
+  font: inherit;
+  font-size: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+}
+
+.search-input:focus,
+.btn:focus-visible,
+.unit-btn:focus-visible,
+.chip:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.2s ease;
+}
+
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.6; cursor: wait; }
+
+.btn-primary {
+  padding: 0 18px;
+  background: var(--accent);
+  color: #1f2937;
+}
+
+.btn-icon {
+  width: 48px;
+  font-size: 1.2rem;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+}
+
+/* ---------- recent searches ---------- */
+.recent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chip {
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+/* ---------- status / errors ---------- */
+.status {
+  min-height: 1.5em;
+  margin: 12px 0 0;
+  text-align: center;
+}
+
+.status.is-error {
+  background: var(--error-bg);
+  padding: 10px 14px;
+  border-radius: 12px;
+}
+
+.status.is-loading::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  vertical-align: -2px;
+  border: 2px solid var(--muted);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- current weather ---------- */
+.current-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.location {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.current-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.current-main {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 10px 0 18px;
+}
+
+.temperature {
+  margin: 0;
+  font-size: 4.5rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.temp-unit {
+  font-size: 1.6rem;
+  vertical-align: top;
+  margin-left: 2px;
+}
+
+.description {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.details {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.detail {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* ---------- forecast ---------- */
+.section-title {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+
+.forecast {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.forecast-day {
+  display: grid;
+  grid-template-columns: 4.5rem 2rem 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.forecast-day:last-child { border-bottom: 0; }
+.forecast-name { font-weight: 600; }
+.forecast-icon { font-size: 1.5rem; text-align: center; }
+.forecast-desc { color: var(--muted); font-size: 0.9rem; }
+.forecast-temps { font-weight: 600; white-space: nowrap; }
+.forecast-temps .min { color: var(--muted); font-weight: 400; margin-left: 6px; }
+
+/* ---------- footer ---------- */
+.app-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.app-footer a { color: var(--text); }
+
+/* =========================================================
+   Responsive design
+   ========================================================= */
+
+/* Small phones: stack the search and shrink the big numbers */
+@media (max-width: 400px) {
+  .search { flex-wrap: wrap; }
+  .search-input { flex-basis: 100%; }
+  .btn-primary { flex: 1; padding: 12px; }
+  .temperature { font-size: 3.6rem; }
+  .forecast-day { grid-template-columns: 3.8rem 1.8rem 1fr auto; }
+  .forecast-desc { display: none; }
+}
+
+/* Tablets and up: 4 detail tiles in one row, forecast as cards */
+@media (min-width: 640px) {
+  .app { padding-top: 40px; }
+  .app-title { font-size: 2rem; }
+  .details { grid-template-columns: repeat(4, 1fr); }
+
+  .forecast { grid-template-columns: repeat(5, 1fr); }
+  .forecast-day {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 12px 6px;
+    gap: 6px;
+  }
+  .forecast-day:last-child { border-bottom: 1px solid var(--card-border); }
+  .forecast-temps .min { display: block; margin-left: 0; }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

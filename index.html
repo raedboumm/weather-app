@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Check the current weather and 5-day forecast for any city." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <title>Weather App</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛅</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-default">
+  <main class="app">
+    <header class="app-header">
+      <h1 class="app-title"><span aria-hidden="true">⛅</span> Weather</h1>
+      <div class="unit-toggle" role="group" aria-label="Temperature unit">
+        <button type="button" class="unit-btn is-active" data-unit="celsius" aria-pressed="true">°C</button>
+        <button type="button" class="unit-btn" data-unit="fahrenheit" aria-pressed="false">°F</button>
+      </div>
+    </header>
+
+    <!-- Search -->
+    <form id="search-form" class="search" autocomplete="off">
+      <label for="city-input" class="visually-hidden">City name</label>
+      <input id="city-input" class="search-input" type="search" placeholder="Search a city, e.g. Tunis" required minlength="2" />
+      <button type="submit" class="btn btn-primary">Search</button>
+      <button type="button" id="locate-btn" class="btn btn-icon" title="Use my location" aria-label="Use my location">📍</button>
+    </form>
+
+    <div id="recent" class="recent" aria-label="Recent searches"></div>
+
+    <!-- Loading / error messages (announced by screen readers) -->
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <!-- Current weather -->
+    <section id="current" class="card current" hidden aria-labelledby="location-name">
+      <div class="current-top">
+        <div>
+          <h2 id="location-name" class="location"></h2>
+          <p id="local-time" class="muted"></p>
+        </div>
+        <span id="current-icon" class="current-icon" aria-hidden="true"></span>
+      </div>
+
+      <div class="current-main">
+        <p class="temperature"><span id="current-temp"></span><span class="temp-unit" id="temp-unit"></span></p>
+        <div>
+          <p id="current-desc" class="description"></p>
+          <p id="high-low" class="muted"></p>
+        </div>
+      </div>
+
+      <ul class="details">
+        <li class="detail"><span class="detail-label">Feels like</span><span id="feels-like" class="detail-value"></span></li>
+        <li class="detail"><span class="detail-label">Humidity</span><span id="humidity" class="detail-value"></span></li>
+        <li class="detail"><span class="detail-label">Wind</span><span id="wind" class="detail-value"></span></li>
+        <li class="detail"><span class="detail-label">Precipitation</span><span id="precipitation" class="detail-value"></span></li>
+      </ul>
+    </section>
+
+    <!-- 5-day forecast -->
+    <section id="forecast-section" class="card" hidden>
+      <h2 class="section-title">Next 5 days</h2>
+      <ul id="forecast" class="forecast"></ul>
+    </section>
+
+    <footer class="app-footer">
+      Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
