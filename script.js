@@ -179,7 +179,7 @@ function renderWeather(place, data) {
     `H: ${Math.round(daily.temperature_2m_max[0])}°  L: ${Math.round(daily.temperature_2m_min[0])}°`;
   $('feels-like').textContent = `${Math.round(current.apparent_temperature)}${unitSymbol}`;
   $('humidity').textContent = `${current.relative_humidity_2m} %`;
-  $('wind').textContent = `${Math.round(current.wind_speed_10m)} ${units.wind_speed_10m}`;
+  $('wind').textContent = `${Math.round(current.wind_speed_10m)} ${state.unit === 'fahrenheit' ? 'mph' : 'km/h'}`;
   $('precipitation').textContent = `${current.precipitation} ${units.precipitation}`;
 
   // next 5 days (index 0 is today, already shown above)
